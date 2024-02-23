@@ -1,0 +1,53 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #000; 
+    color: #fff; 
+}
+
+h1 {
+    color: #4CAF50; 
+}
+
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 15px 30px; 
+    background-color: #4CAF50; 
+    color: white; 
+    text-decoration: none; 
+    border: none; /* 버튼과 링크에 테두리 없음 */
+    border-radius: 5px; 
+    box-shadow: 0 4px #999; 
+    cursor: pointer; /* 손가락 커서 표시 */
+    transition: all 0.2s; 
+}
+
+.button:hover {
+    background-color: #45a049; 
+    box-shadow: 0 2px #666; 
+    transform: translateY(-2px); 
+}
+
+.button:active {
+    box-shadow: 0 1px #666; 
+    transform: translateY(1px); 
+}
+
+input[type="file"] {
+    margin-top: 20px;
+}
+
+input[type="submit"], button.button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #555; 
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; 
+}
+
+input[type="submit"]:hover, button.button:hover {
+    background-color: #666; 
+}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>분석 결과</title>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Analysis Results</h1>
+    <p>총 영상에서 {{ count_swear }}번의 욕설이 감지되었습니다.</p>
+    <p>{{ message }}</p>
+    <a href="/" class = "button">Another analysis</a>
+</body>
+</html>
