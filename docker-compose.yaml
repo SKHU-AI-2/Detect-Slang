@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  postgres-server:
+    image: postgres:14.0
+    container_name: postgres-server
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ###########
+      POSTGRES_DB: slang
+
+  data-generator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: data-generator
+    depends_on:
+      - postgres-server
+    ports:
+      - "8000:8000" 
+    command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload 
