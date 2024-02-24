@@ -6,42 +6,28 @@ import numpy as np
 from tensorflow.keras.models import load_model
 import shutil
 import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
-
-
+import sqlite3
 
 app = FastAPI()
-
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-
 model = load_model('Slang_CNN_model.h5')
-
-
 
 temp_dir = 'temp'
 os.makedirs(temp_dir, exist_ok=True)
 
 
-# DB 연결
 def get_db_connection():
-    return psycopg2.connect(
-        host="postgres-server", 
-        database="slang", #
-        user="postgres", #
-        password="#########", #
-        port = 5432 #
-    )
-
+    conn = sqlite3.connect("slang_database.db")
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 @app.get("/")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
-
 
 
 @app.post("/analyze/")
@@ -94,12 +80,14 @@ async def analyze_video(request: Request, username: str = Form(...), file: Uploa
 
 
     db_connect = get_db_connection()
-    with db_connect.cursor(cursor_factory=RealDictCursor) as cur:
-        insert_query = """
-        INSERT INTO user_swear_count (username, swear_count, detected_at)
-        VALUES (%s, %s, NOW());
-        """
-        cur.execute(insert_query, (username, count_swear))
-        db_connect.commit()
+    cur = db_connect.cursor()
+    insert_query = """
+    INSERT INTO user_swear_count (username, swear_count, detected_at)
+    VALUES (?, ?, datetime('now'));
+    """
+
+    cur.execute(insert_query, (username, count_swear))
+    db_connect.commit()
+    cur.close()
 
     return templates.TemplateResponse("results.html", {"request": request, "username": username, "count_swear": count_swear, "message": message})
